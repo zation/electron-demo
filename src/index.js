@@ -1,6 +1,7 @@
 const { app, BrowserWindow, BrowserView } = require('electron')
+const path = require('path')
 
-const cookies = [{"domain":".onlyfans.com","expirationDate":1746287976.789983,"hostOnly":false,"httpOnly":true,"name":"csrf","path":"/","sameSite":"unspecified","secure":true,"session":false,"storeId":"0","value":"FfJ4fAFWfce5012c1d1ed5b50365b535747790a7"},{"domain":".onlyfans.com","expirationDate":1739885734.7431,"hostOnly":false,"httpOnly":false,"name":"cookiesAccepted","path":"/","sameSite":"unspecified","secure":false,"session":false,"storeId":"0","value":"all"},{"domain":".onlyfans.com","expirationDate":1743263975,"hostOnly":false,"httpOnly":false,"name":"fp","path":"/","sameSite":"unspecified","secure":false,"session":false,"storeId":"0","value":"c4a9c1fd09219e05c9837761f6d7306640d2507f"},{"domain":".onlyfans.com","expirationDate":1746287977.244185,"hostOnly":false,"httpOnly":false,"name":"lang","path":"/","sameSite":"unspecified","secure":false,"session":false,"storeId":"0","value":"en"},{"domain":".onlyfans.com","expirationDate":1746284497.639474,"hostOnly":false,"httpOnly":true,"name":"auth_id","path":"/","sameSite":"unspecified","secure":true,"session":false,"storeId":"0","value":"391014227"},{"domain":".onlyfans.com","expirationDate":1712591976.789868,"hostOnly":false,"httpOnly":true,"name":"sess","path":"/","sameSite":"unspecified","secure":true,"session":false,"storeId":"0","value":"9v1i1sg7v5i0jnnk3r9dl7t9l0"},{"domain":".onlyfans.com","expirationDate":1743263978,"hostOnly":false,"httpOnly":false,"name":"ref_src","path":"/","sameSite":"unspecified","secure":false,"session":false,"storeId":"0","value":"https%3A%2F%2Faccounts.google.com%2F"},{"domain":".onlyfans.com","expirationDate":1746287978.520779,"hostOnly":false,"httpOnly":false,"name":"st","path":"/","sameSite":"unspecified","secure":true,"session":false,"storeId":"0","value":"d219ebaf65e05911d7245aa49786bc1a8e78738061d180ef200d441ddcfdd42d"}]
+const cookies = [{"domain":".onlyfans.com","expirationDate":1746288938.804531,"hostOnly":false,"httpOnly":true,"name":"csrf","path":"/","sameSite":"unspecified","secure":true,"session":false,"storeId":"0","value":"FfJ4fAFWfce5012c1d1ed5b50365b535747790a7"},{"domain":".onlyfans.com","expirationDate":1739885734.7431,"hostOnly":false,"httpOnly":false,"name":"cookiesAccepted","path":"/","sameSite":"unspecified","secure":false,"session":false,"storeId":"0","value":"all"},{"domain":".onlyfans.com","expirationDate":1743264938,"hostOnly":false,"httpOnly":false,"name":"fp","path":"/","sameSite":"unspecified","secure":false,"session":false,"storeId":"0","value":"c4a9c1fd09219e05c9837761f6d7306640d2507f"},{"domain":".onlyfans.com","expirationDate":1746288939.121821,"hostOnly":false,"httpOnly":false,"name":"lang","path":"/","sameSite":"unspecified","secure":false,"session":false,"storeId":"0","value":"en"},{"domain":".onlyfans.com","expirationDate":1746284497.639474,"hostOnly":false,"httpOnly":true,"name":"auth_id","path":"/","sameSite":"unspecified","secure":true,"session":false,"storeId":"0","value":"391014227"},{"domain":".onlyfans.com","expirationDate":1712592937.494287,"hostOnly":false,"httpOnly":true,"name":"sess","path":"/","sameSite":"unspecified","secure":true,"session":false,"storeId":"0","value":"nm1i08k5q2lseh017075gjrr3f"},{"domain":".onlyfans.com","expirationDate":1743264939,"hostOnly":false,"httpOnly":false,"name":"ref_src","path":"/","sameSite":"unspecified","secure":false,"session":false,"storeId":"0","value":"https%3A%2F%2Faccounts.google.com%2F"},{"domain":".onlyfans.com","expirationDate":1746288940.166147,"hostOnly":false,"httpOnly":false,"name":"st","path":"/","sameSite":"unspecified","secure":true,"session":false,"storeId":"0","value":"05fb3957b926fa179b713dfc1a5edbe2f67e1da9a6ee9f1813b389964b256053"}]
 const cookiesObject = cookies.reduce((a,b) => { return {...a, [b.name]:b.value} }, {})
 console.log(cookiesObject)
 
@@ -29,15 +30,16 @@ const createWindow = () => {
   mainWindow.setBrowserView(view)
   view.setBounds({ x: 0, y: 0, width: 1600, height: 1200 })
 
-  cookies.forEach(({ name, value }) => {
+  cookies.forEach((cookie) => {
     view.webContents.session.cookies.set({
       url: 'https://onlyfans.com',
-      domain: '.onlyfans.com',
-      value,
-      name,
-      httpOnly: true,
-      secure: true,
-      sameSite: 'no_restriction',
+      path: cookie.path,
+      domain: cookie.domain,
+      value: cookie.value,
+      name: cookie.name,
+      httpOnly: cookie.httpOnly,
+      secure: cookie.secure,
+      sameSite: 'unspecified',
     })
   })
   view.webContents.openDevTools()
